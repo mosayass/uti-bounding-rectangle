@@ -56,7 +56,7 @@ class BoundingRectangleInputs(Inputs):
 
 
 class BoundingRectangleOutputs(Outputs):
-    outputImage: OutputDetections
+    outputDetections: OutputDetections
 
     class Config:
         title = "Bounding Rectangle Outputs"

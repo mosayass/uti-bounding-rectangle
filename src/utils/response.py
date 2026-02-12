@@ -4,7 +4,7 @@ from components.DrawBoundingRectangle.src.models.PackageModel import PackageConf
 
 
 def build_response(context):
-    output_detections = OutputDetections(value=context.image)
+    output_detections = OutputDetections(value=context.detections)
     detect_outputs = BoundingRectangleOutputs(outputDetections=output_detections)
     bounding_rectangle_response = BoundingRectangleResponse(outputs=detect_outputs)
     bounding_rectangle_executor = BoundingRectangleExecutor(value=bounding_rectangle_response)
