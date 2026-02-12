@@ -311,7 +311,7 @@ class ConfigThickness(Config):
         }
 
 
-class DrawBoundingRectangleConfigs(Configs):
+class BoundingRectangleConfigs(Configs):
     """
     Aggregates all visualization settings for drawing bounding rectangles.
     Controls color assignment logic, color palettes, line thickness, and corner radius.
@@ -322,9 +322,9 @@ class DrawBoundingRectangleConfigs(Configs):
     configRadius: ConfigRadius
 
     class Config:
-        title = "Draw Bounding Box Configurations"
+        title = "Bounding Rectangle Configurations"
         json_schema_extra = {
-            "shortDescription": "Bounding Box Visual Settings"
+            "shortDescription": "Bounding Rectangle Visual Settings"
         }
 
 class Detection(Detection):
@@ -377,25 +377,23 @@ class OutputImage(Output):
     class Config:
         title = "Image"
 
-
-class DrawBoundingRectangleInputs(Inputs):
+class BoundingRectangleInputs(Inputs):
     inputImage: InputImage
     inputDetections: InputDetections
 
     class Config:
-        title = "Draw Bounding Rectangle Inputs"
+        title = "Bounding Rectangle Inputs"
 
 
-
-class DrawBoundingRectangleOutputs(Outputs):
+class BoundingRectangleOutputs(Outputs):
     outputImage: OutputImage
 
     class Config:
-        title = "Draw Bounding Box Outputs"
+        title = "Bounding Rectangle Outputs"
 
-class DrawBoundingRectangleRequest(Request):
-    inputs: Union[DrawBoundingRectangleInputs]
-    configs: DrawBoundingRectangleConfigs
+class BoundingRectangleRequest(Request):
+    inputs: Union[BoundingRectangleInputs]
+    configs: BoundingRectangleConfigs
 
     class Config:
         json_schema_extra = {
@@ -403,21 +401,21 @@ class DrawBoundingRectangleRequest(Request):
         }
 
 
-class DrawBoundingRectangleResponse(Response):
-    outputs: DrawBoundingRectangleOutputs
+class BoundingRectangleResponse(Response):
+    outputs: BoundingRectangleOutputs
 
     class Config:
-        title = "Draw Bounding Box Response"
+        title = "Bounding Rectangle Response"
 
 
-class DrawBoundingRectangleExecutor(Config):
-    name: Literal["DrawBoundingRectangle"] = "DrawBoundingRectangle"
-    value: Union[DrawBoundingRectangleRequest, DrawBoundingRectangleResponse]
+class BoundingRectangleExecutor(Config):
+    name: Literal["BoundingRectangle"] = "BoundingRectangle"
+    value: Union[BoundingRectangleRequest, BoundingRectangleResponse]
     type: Literal["object"] = "object"
     field: Literal["option"] = "option"
 
     class Config:
-        title = "Draw Bounding Rectangle Executor"
+        title = "Bounding Rectangle Executor"
         json_schema_extra = {
             "target": {
                 "value": 0
@@ -427,7 +425,7 @@ class DrawBoundingRectangleExecutor(Config):
 
 class ConfigExecutor(Config):
     name: Literal["ConfigExecutor"] = "ConfigExecutor"
-    value: Union[DrawBoundingRectangleExecutor]
+    value: Union[BoundingRectangleExecutor]
     type: Literal["executor"] = "executor"
     field: Literal["dependentDropdownlist"] = "dependentDropdownlist"
     restart: Literal[True] = True
@@ -438,7 +436,6 @@ class ConfigExecutor(Config):
             "target": "value"
         }
 
-
 class PackageConfigs(Configs):
     executor: ConfigExecutor
 
@@ -448,7 +445,7 @@ class PackageConfigs(Configs):
 class PackageModel(Package):
     configs: PackageConfigs
     type: Literal["component"] = "component"
-    name: Literal["DrawBoundingRectangle"] = "DrawBoundingRectangle"
+    name: Literal["BoundingRectangle"] = "BoundingRectangle"
 
     class Config:
         title = "Package Model"

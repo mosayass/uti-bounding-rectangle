@@ -11,11 +11,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../../../'))
 from sdks.novavision.src.media.image import Image
 from sdks.novavision.src.base.component import Component
 from sdks.novavision.src.helper.executor import Executor
-from components.DrawBoundingRectangle.src.utils.response import build_response
-from components.DrawBoundingRectangle.src.models.PackageModel import PackageModel
+from components.BoundingRectangle.src.utils.response import build_response
+from components.BoundingRectangle.src.models.PackageModel import PackageModel
 
 
-class DrawBoundingRectangle(Component):
+class BoundingRectangle(Component):
     def __init__(self, request, bootstrap):
         super().__init__(request, bootstrap)
         self.request.model = PackageModel(**(self.request.data))
@@ -93,12 +93,12 @@ class DrawBoundingRectangle(Component):
 
         return color_dict
 
-    def draw_bounding_rectangle(self, image, color_dict):
+    def bounding_rectangle(self, image, color_dict):
         """
                 Calculates and draws the Rotated Bounding Rectangle.
                 Logic:
                 1. Check for 'keyPoints' (from Segmentation).
-                2. If found -> Calculate MinAreaRect -> Draw Rotated Box.
+                2. If found -> Calculate MinAreaRect -> Draw Rotated Rectangle.
                 3. If not found -> Fallback to standard BoundingBox.
                 """
         for idx, detection in enumerate(self.detections):
@@ -173,7 +173,7 @@ class DrawBoundingRectangle(Component):
 
     def run(self):
         img = Image.get_frame(img=self.image, redis_db=self.redis_db)
-        img.value = self.draw_bounding_rectangle(img.value, self.select_color())
+        img.value = self.bounding_rectangle(img.value, self.select_color())
         self.image = Image.set_frame(img=img, package_uID=self.uID, redis_db=self.redis_db)
         packageModel = build_response(context=self)
         return packageModel
