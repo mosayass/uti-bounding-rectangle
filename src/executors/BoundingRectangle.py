@@ -54,15 +54,16 @@ class BoundingRectangle(Component):
                 pts_np = np.array(pts, dtype=np.int32)
 
                 # 2. Calculate the Standard Upright Bounding Box
-                # Returns (x, y, w, h)
                 x, y, w, h = cv2.boundingRect(pts_np)
 
                 # 3. Create the new Bounding Box Object
+                # CRITICAL FIX: Cast numpy ints to standard python ints using int()
+                # Otherwise, JSON serialization will fail silently.
                 new_bbox = {
-                    "left": x,
-                    "top": y,
-                    "width": w,
-                    "height": h
+                    "left": int(x),
+                    "top": int(y),
+                    "width": int(w),
+                    "height": int(h)
                 }
 
                 # 4. Update the Detection Object
@@ -72,10 +73,10 @@ class BoundingRectangle(Component):
                     # Depending on your object structure, you might need to instantiate a class
                     # or just assign values if the attribute already exists.
                     if hasattr(detection, 'boundingBox') and detection.boundingBox is not None:
-                        detection.boundingBox.left = x
-                        detection.boundingBox.top = y
-                        detection.boundingBox.width = w
-                        detection.boundingBox.height = h
+                        detection.boundingBox.left = int(x)
+                        detection.boundingBox.top = int(y)
+                        detection.boundingBox.width = int(w)
+                        detection.boundingBox.height = int(h)
                     else:
                         # If it's None, you might need to assign a dict or object based on your framework
                         # Assuming simple assignment works for now:
