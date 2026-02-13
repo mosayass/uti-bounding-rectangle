@@ -1,6 +1,6 @@
 
 from sdks.novavision.src.helper.package import PackageHelper
-from components.DrawBoundingRectangle.src.models.PackageModel import PackageConfigs, ConfigExecutor,PackageModel,OutputDetections,BoundingRectangleOutputs,BoundingRectangleExecutor,BoundingRectangleResponse
+from components.BoundingRectangle.src.models.PackageModel import PackageConfigs, ConfigExecutor,PackageModel,OutputDetections,BoundingRectangleOutputs,BoundingRectangleExecutor,BoundingRectangleResponse
 
 
 def build_response(context):
