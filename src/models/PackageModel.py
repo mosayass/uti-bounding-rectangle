@@ -63,7 +63,7 @@ class BoundingRectangleOutputs(Outputs):
 
 class BoundingRectangleRequest(Request):
     inputs: Union[BoundingRectangleInputs]
-    configs: Configs
+    configs: Union[Configs, List]
 
     class Config:
         json_schema_extra = {
