@@ -37,10 +37,10 @@ class BoundingRectangle(Component):
             return []
 
         for detection in self.detections:
-            # Check if we are dealing with a Dictionary or an Object
+            # Handle dictionary vs object access
             is_dict = isinstance(detection, dict)
 
-            # Get KeyPoints safely
+            # Get KeyPoints (The Polygon Mask)
             key_points = detection.get("keyPoints") if is_dict else getattr(detection, "keyPoints", None)
 
             if key_points and len(key_points) >= 3:
@@ -56,29 +56,31 @@ class BoundingRectangle(Component):
                 # 2. Calculate the Standard Upright Bounding Box
                 x, y, w, h = cv2.boundingRect(pts_np)
 
-                # 3. CRITICAL FIX: Convert Numpy Ints to Standard Python Ints
-                # JSON cannot serialize numpy types, causing "No Output" errors.
-                x, y, w, h = int(x), int(y), int(w), int(h)
+                # 3. Create the new Bounding Box Object
+                # CRITICAL FIX: Cast numpy ints to standard python ints using int()
+                # Otherwise, JSON serialization will fail silently.
+                new_bbox = {
+                    "left": int(x),
+                    "top": int(y),
+                    "width": int(w),
+                    "height": int(h)
+                }
 
                 # 4. Update the Detection Object
                 if is_dict:
-                    # If input is a Dict, we assign a Dict
-                    detection["boundingBox"] = {
-                        "left": x, "top": y, "width": w, "height": h
-                    }
+                    detection["boundingBox"] = new_bbox
                 else:
-                    # If input is an Object, we MUST assign an ROI Object.
-                    # Assigning a dict to an object field causes validation crashes.
-                    if 'ROI' in globals():
-                        detection.boundingBox = ROI(left=x, top=y, width=w, height=h)
+                    # Depending on your object structure, you might need to instantiate a class
+                    # or just assign values if the attribute already exists.
+                    if hasattr(detection, 'boundingBox') and detection.boundingBox is not None:
+                        detection.boundingBox.left = int(x)
+                        detection.boundingBox.top = int(y)
+                        detection.boundingBox.width = int(w)
+                        detection.boundingBox.height = int(h)
                     else:
-                        # Fallback if ROI isn't imported (but please import it!)
-                        # We try to construct a simple object structure if needed
-                        class TempROI:
-                            pass
-                        temp = TempROI()
-                        temp.left, temp.top, temp.width, temp.height = x, y, w, h
-                        detection.boundingBox = temp
+                        # If it's None, you might need to assign a dict or object based on your framework
+                        # Assuming simple assignment works for now:
+                        detection.boundingBox = new_bbox
 
         return self.detections
 
